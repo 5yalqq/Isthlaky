@@ -1,381 +1,123 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استهلاكي - Isthlaky</title>
-    <link rel="icon" href="https://i.imgur.com/n2zciLu.png">
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الخدمات</title>
 
-    <style>
-        :root {
-            --edubia-blue: #000696;
-            --edubia-light-bg: #f8faff;
-            --edubia-card-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --edubia-radius: 20px;
-            --accent-green: #07bc0c;
-        }
+<style>
+:root {
+    --bg: #0f172a;
+    --card: #111827;
+    --primary: #3b82f6;
+    --text: #f9fafb;
+    --muted: #9ca3af;
+    --radius: 20px;
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background-color: var(--edubia-light-bg);
-            margin: 0;
-            color: #2d3436;
-        }
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
 
-        header {
-            background: white;
-            padding: 12px 8%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-        .brand { display: flex; align-items: center; gap: 15px; }
-        
-        .logo-container img {
-            height: 65px;
-            width: auto;
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.1));
-            image-rendering: crisp-edges;
-        }
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+}
 
-        .brand-text h1 { 
-            color: var(--edubia-blue); 
-            font-size: 28px; 
-            margin: 0; 
-            font-weight: 800; 
-        }
+h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 8px;
+}
 
-        .main-container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+.subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 30px;
+}
 
-        .layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 30px;
-        }
+.card {
+    background: rgba(17, 24, 39, 0.85);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.4);
+    backdrop-filter: blur(10px);
+}
 
-        .sidebar {
-            background: white;
-            padding: 20px;
-            border-radius: var(--edubia-radius);
-            box-shadow: var(--edubia-card-shadow);
-            height: fit-content;
-        }
+.card h2 {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+}
 
-        .nav-item {
-            padding: 15px 20px;
-            margin-bottom: 10px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
-            color: #636e72;
-        }
+.card p {
+    margin: 0 0 16px 0;
+    color: var(--muted);
+    font-size: 14px;
+}
 
-        .nav-item.active { 
-            background: var(--edubia-blue); 
-            color: white; 
-        }
+button {
+    width: 100%;
+    height: 42px;
+    border: none;
+    border-radius: 14px;
+    background: var(--primary);
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        .card {
-            background: white;
-            border-radius: var(--edubia-radius);
-            padding: 40px;
-            box-shadow: var(--edubia-card-shadow);
-            display: none;
-            min-height: 550px;
-        }
-
-        .card.active { display: block; animation: fadeIn 0.5s ease; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        h2 { border-right: 5px solid var(--accent-green); padding-right: 15px; color: var(--edubia-blue); }
-
-        input, select {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            margin-top: 8px;
-            box-sizing: border-box;
-        }
-
-        .btn-primary {
-            background: var(--edubia-blue);
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        /* تنسيق لوحة النصائح الجديدة */
-        .advice-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .advice-card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            border-top: 4px solid var(--edubia-blue);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .advice-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .advice-list li {
-            margin-bottom: 10px;
-            position: relative;
-            padding-right: 20px;
-        }
-
-        .advice-list li::before {
-            content: "•";
-            position: absolute;
-            right: 0;
-            color: var(--accent-green);
-            font-weight: bold;
-        }
-
-        .chart-wrapper { height: 350px; margin-top: 20px; }
-
-        .formula-box {
-            background: #1e272e;
-            color: #00d8d6;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            font-family: monospace;
-            font-size: 20px;
-            margin: 20px 0;
-        }
-
-        @media (max-width: 900px) {
-            .layout { grid-template-columns: 1fr; }
-            .advice-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+</style>
 </head>
+
 <body>
 
-<header>
-    <div class="brand">
-        <div class="logo-container"><img src="https://i.imgur.com/n2zciLu.png" alt="Logo"></div>
-        <div class="brand-text">
-            <h1>استهلاكي</h1>
-            <span style="color: var(--accent-green); font-size: 11px; font-weight: bold;">SMART MATH SYSTEM</span>
-        </div>
+<div class="container">
+
+    <h1>🔗 لوحة الوصول السريع</h1>
+    <div class="subtitle">اختر الخدمة التي تريد فتحها</div>
+
+    <!-- كرت 1 -->
+    <div class="card">
+        <h2>📊 جدول البيانات والفواتير</h2>
+        <p>إدارة الفواتير وتسجيل البيانات بسهولة</p>
+        <button onclick="openLink('https://docs.google.com/spreadsheets/d/1L78FAQnkoVUfU9rogtPid7TBjdzihXfVxkp1qQeACL0/edit?usp=sharing')">
+            فتح الموقع
+        </button>
     </div>
-    <div style="background: #07bc0c15; color: #07bc0c; padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: bold;">Dashboard v3.0</div>
-</header>
 
-<div class="main-container">
-    <div class="layout">
-        <div class="sidebar">
-            <div class="nav-item active" onclick="tab(event, 'calc')">📊 حساب الاستهلاك</div>
-            <div class="nav-item" onclick="tab(event, 'bills')">📈 فواتير الكهرباء</div>
-            <div class="nav-item" onclick="tab(event, 'logic')">🧪 استنتاج الدوال</div>
-            <div class="nav-item" onclick="tab(event, 'desmos')">📱 محاكي ديسموس</div>
-        </div>
-
-        <div class="content-area">
-            <div id="calc" class="card active">
-                <h2>حساب الاستهلاك (Energy Analysis)</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div>
-                        <label>القدرة الكهربائية (Watts)</label>
-                        <input type="number" id="p_in" placeholder="مثلاً: 2500">
-                    </div>
-                    <div>
-                        <label>ساعات العمل (Daily Hours)</label>
-                        <input type="number" id="t_in" placeholder="مثلاً: 10">
-                    </div>
-                </div>
-                <button class="btn-primary" onclick="calcEnergy()">تحليل الاستهلاك الذكي</button>
-                <div id="energy_res" style="margin-top: 25px;"></div>
-            </div>
-
-            <div id="bills" class="card">
-                <h2>الممثل البياني للفواتير</h2>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
-                    <input type="number" class="b_val" placeholder="شهر 1">
-                    <input type="number" class="b_val" placeholder="شهر 2">
-                    <input type="number" class="b_val" placeholder="شهر 3">
-                    <input type="number" class="b_val" placeholder="شهر 4">
-                </div>
-                <select id="b_type" style="margin-top: 15px;">
-                    <option value="bar">Bar Chart (أعمدة)</option>
-                    <option value="line">Line Chart (خطي)</option>
-                </select>
-                <button class="btn-primary" onclick="drawBillChart()">رسم البيانات</button>
-                <div class="chart-wrapper"><canvas id="billChart"></canvas></div>
-            </div>
-
-            <div id="logic" class="card">
-                <h2>الاستنتاج الرياضي (Function Fitting)</h2>
-                <select id="eq_type">
-                    <option value="linear">Linear Regression (y = mx + b)</option>
-                    <option value="quad">Quadratic Fit (y = ax² + b)</option>
-                </select>
-                <button class="btn-primary" onclick="modelFunction()">توليد النموذج الرياضي</button>
-                <div id="eq_res" class="formula-box">y = f(x)</div>
-                <div class="chart-wrapper"><canvas id="logicChart"></canvas></div>
-            </div>
-
-            <div id="desmos" class="card">
-                <h2>محاكي ديسموس</h2>
-                <input type="text" id="des_in" placeholder="مثلاً: x^2 + 2*x" dir="ltr">
-                <button class="btn-primary" onclick="plotDesmos()">تمثيل الدالة</button>
-                <div class="chart-wrapper"><canvas id="desChart"></canvas></div>
-            </div>
-        </div>
+    <!-- كرت 2 -->
+    <div class="card">
+        <h2>📈 ديسموس بالعربية</h2>
+        <p>رسم وتمثيل الدوال الرياضية باللغة العربية</p>
+        <button onclick="openLink('https://graph-maker-arabic--opi657hrtydh.replit.app')">
+            فتح الموقع
+        </button>
     </div>
+
 </div>
 
 <script>
-    function tab(e, id) {
-        document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        e.currentTarget.classList.add('active');
-    }
-
-    function calcEnergy() {
-        const p = parseFloat(document.getElementById('p_in').value);
-        const t = parseFloat(document.getElementById('t_in').value);
-        
-        if (isNaN(p) || isNaN(t)) return alert("يرجى إدخال أرقام صحيحة");
-
-        const energy = (p / 1000) * t;
-        let color = '#07bc0c', status = 'منخفض (مثالي)', envAdvice = [];
-        
-        if (energy >= 5) {
-            color = '#e74c3c'; status = 'مرتفع جداً';
-            envAdvice = ["استبدل الأجهزة القديمة بأخرى (Energy Star)", "قلل فترات التشغيل في أوقات الذروة", "تحقق من العزل الحراري للمكان"];
-        } else if (energy >= 2) {
-            color = '#f1c40f'; status = 'متوسط الاستهلاك';
-            envAdvice = ["اضبط درجة حرارة التبريد على 24 مئوية", "تأكد من إغلاق المنافذ عند التشغيل", "استخدم المؤقت الذكي للأجهزة"];
-        } else {
-            envAdvice = ["استهلاكك ممتاز وصديق للبيئة", "استمر في استخدام المصابيح الموفرة", "ساهم في نشر ثقافة الترشيد"];
-        }
-
-        const mathAdvice = [
-            `العلاقة طردية خطية: زيادة الوقت تزيد الطاقة مباشرة.`,
-            `البصمة الكربونية: ${(energy * 0.47).toFixed(2)} كجم CO2 تقريباً.`,
-            `القانون المستخدم: E(kWh) = (P / 1000) * t`
-        ];
-
-        document.getElementById('energy_res').innerHTML = `
-            <div style="padding: 20px; border-radius: 15px; background: ${color}15; border: 2px solid ${color}; text-align:center;">
-                <p style="margin:0; font-weight:bold; color:${color}">${status}</p>
-                <h3 style="margin:5px 0; font-size:32px;">${energy.toFixed(2)} <span style="font-size:16px;">kWh</span></h3>
-            </div>
-            <div class="advice-grid">
-                <div class="advice-card" style="border-top-color: ${color}">
-                    <h4 style="margin-top:0;">🌿 نصائح بيئية</h4>
-                    <ul class="advice-list">${envAdvice.map(a => `<li>${a}</li>`).join('')}</ul>
-                </div>
-                <div class="advice-card" style="border-top-color: var(--edubia-blue)">
-                    <h4 style="margin-top:0;">🔢 تحليل رياضي</h4>
-                    <ul class="advice-list">${mathAdvice.map(m => `<li>${m}</li>`).join('')}</ul>
-                </div>
-            </div>`;
-    }
-
-    // بقية دوال الرسم البياني والرياضيات
-    let bChart, lChart, dChart;
-
-    function drawBillChart() {
-        const vals = Array.from(document.querySelectorAll('.b_val')).map(v => parseFloat(v.value) || 0);
-        const ctx = document.getElementById('billChart').getContext('2d');
-        if(bChart) bChart.destroy();
-        bChart = new Chart(ctx, {
-            type: document.getElementById('b_type').value,
-            data: {
-                labels: ['شهر 1', 'شهر 2', 'شهر 3', 'شهر 4'],
-                datasets: [{ label: 'قيمة الفاتورة', data: vals, backgroundColor: '#00069633', borderColor: '#000696', borderWidth: 2 }]
-            },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-    }
-
-    function modelFunction() {
-        const vals = Array.from(document.querySelectorAll('.b_val')).map(v => parseFloat(v.value) || 0);
-        const type = document.getElementById('eq_type').value;
-        let yFit = [], formula = "";
-        
-        if(type === 'linear') {
-            let m = (vals[3] - vals[0]) / 3;
-            let b = vals[0];
-            formula = `y = ${m.toFixed(2)}x + ${b.toFixed(2)}`;
-            [0,1,2,3].forEach(x => yFit.push(m * x + b));
-        } else {
-            let a = (vals[3] - vals[0]) / 9;
-            let b = vals[0];
-            formula = `y = ${a.toFixed(2)}x² + ${b.toFixed(2)}`;
-            [0,1,2,3].forEach(x => yFit.push(a * Math.pow(x, 2) + b));
-        }
-        
-        document.getElementById('eq_res').innerText = formula;
-        const ctx = document.getElementById('logicChart').getContext('2d');
-        if(lChart) lChart.destroy();
-        lChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [0, 1, 2, 3],
-                datasets: [
-                    { label: 'بيانات حقيقية', data: vals, borderColor: '#ff4757', borderDash: [5,5], fill: false },
-                    { label: 'النموذج المتوقع', data: yFit, borderColor: '#2ed573', backgroundColor: '#2ed57315', fill: true }
-                ]
-            },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-    }
-
-    function plotDesmos() {
-        const expr = document.getElementById('des_in').value;
-        const xVals = [], yVals = [];
-        try {
-            for(let x = -5; x <= 5; x += 0.5) {
-                xVals.push(x);
-                yVals.push(math.evaluate(expr, {x: x}));
-            }
-            const ctx = document.getElementById('desChart').getContext('2d');
-            if(dChart) dChart.destroy();
-            dChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: xVals,
-                    datasets: [{ label: `y = ${expr}`, data: yVals, borderColor: '#000696', borderWidth: 3, pointRadius: 2 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        } catch(e) { alert("خطأ في الصيغة! استخدم x كمتغير."); }
-    }
+function openLink(url) {
+    window.open(url, "_blank");
+}
 </script>
 
 </body>
